@@ -4375,25 +4375,42 @@ function mhToggleCampaign(){
   mhSave();mhRender();
 }
 function mhLockInList(){
-  mhModal({
-    title: 'Lock In List?',
-    body: '<p style="font-family:\'IM Fell English\',serif;font-size:14px;line-height:1.6;color:var(--fg2)">Locking in your list will prevent further changes to skills and injuries.</p><p style="font-family:monospace;font-size:12px;color:var(--warn);margin-top:8px">Make sure your warband reflects its current mid-campaign state before proceeding.</p>',
-    buttons: [
-      {label: 'Cancel', cls: 'muted', action: () => { mhCloseModal(); }},
-
-      {label: 'Lock In List', cls: 'primary', action: () => {
-        console.log("✅ Lock In List button was CLICKED!");   // ← Should appear in console
-        console.trace();
-
-        MH_ST.round = 1;
-        mhSave();
-        mhRender();
-
-        // Optional: close the modal after locking
-        mhCloseModal();
-      }}
+  mhShowModal(
+    'Lock In List?', 
+    `<p style="font-family:'IM Fell English',serif;font-size:14px;line-height:1.6;color:var(--fg2)">
+       Locking in your list will prevent further changes to skills and injuries.
+     </p>
+     <p style="font-family:monospace;font-size:12px;color:var(--warn);margin-top:8px">
+       Make sure your warband reflects its current mid-campaign state before proceeding.
+     </p>`,
+    [
+      { 
+        label: 'Cancel', 
+        cls: 'muted', 
+        action: () => { mhCloseModal(); } 
+      },
+      { 
+        label: 'Lock In List', 
+        cls: 'primary', 
+        action: () => {
+          console.log("✅ Lock In List button was CLICKED!");
+          
+          // Actual locking logic
+          MH_ST.isCampaignWarband = true;
+          MH_ST.campaignStarted = true;
+          MH_ST.round = 1;
+          
+          mhSave();        // Save to localStorage
+          mhRender();      // Refresh the UI
+          
+          mhCloseModal();
+          
+          // Optional success message
+          mhShowToast("Warband locked in for campaign!", "success");
+        }
+      }
     ]
-  });
+  );
 }
 function mhAdvanceToRound2(){
   mhModal({
