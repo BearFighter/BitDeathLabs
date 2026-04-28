@@ -4375,7 +4375,7 @@ function mhToggleCampaign(){
   mhSave();mhRender();
 }
 function mhLockInList(){
-  mhShowModal(
+  mhShowModalHtml(
     'Lock In List?', 
     `<p style="font-family:'IM Fell English',serif;font-size:14px;line-height:1.6;color:var(--fg2)">
        Locking in your list will prevent further changes to skills and injuries.
@@ -4395,17 +4395,14 @@ function mhLockInList(){
         action: () => {
           console.log("✅ Lock In List button was CLICKED!");
           
-          // Actual locking logic
           MH_ST.isCampaignWarband = true;
           MH_ST.campaignStarted = true;
           MH_ST.round = 1;
           
-          mhSave();        // Save to localStorage
-          mhRender();      // Refresh the UI
-          
+          mhSave();
+          mhRender();
           mhCloseModal();
           
-          // Optional success message
           mhShowToast("Warband locked in for campaign!", "success");
         }
       }
